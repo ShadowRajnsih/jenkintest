@@ -15,7 +15,7 @@ pipeline {
         stage("Build image and push") {
             steps {
                 script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub')
+                    docker.withRegistry("https://registry.hub.docker.com", "dockerhub")
                     myapp = docker.build("rrj66520/demo:${env.BUILD_ID}")
                 }
             }
