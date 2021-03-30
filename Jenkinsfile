@@ -15,7 +15,7 @@ pipeline {
                 checkout scm
             }
         }
-        stage("Build image") {
+        stage("Build image and push") {
             steps {
                 script {
                     sh "docker build . -t ntrial"
@@ -25,13 +25,7 @@ pipeline {
                 }
             }
         }
-        stage('Nexus Push'){
-            steps{
-                docker.withRegistry("https://registry.hub.docker.com", "dockerhub")
-                    myapp = docker.build("rrj66520/demo:${env.BUILD_ID}")
-                }
-            }
-        }
+        
         // stage("Push image") {
         //     steps {
         //         script {
