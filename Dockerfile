@@ -1,4 +1,5 @@
 FROM ubuntu
+ENV NODE_ENV="production"
 WORKDIR /usr/src/app
 COPY . .
 RUN apt-get update
