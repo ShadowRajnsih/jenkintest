@@ -5,6 +5,7 @@ pipeline {
         CLUSTER_NAME = 'cluster-1'
         LOCATION = 'us-central1-a'
         CREDENTIALS_ID = 'master-coder-297316'
+        DOCKER_TAG='latest'
         dockerImage=''
         registry='rrj66520/jenktry'
     }
@@ -14,12 +15,20 @@ pipeline {
                 checkout scm
             }
         }
-        stage("Build image and push") {
+        stage("Build image") {
             steps {
                 script {
-                    dockerImage=docker.build.registry
+                    sh "docker build . -t ntrial"
+                    // dockerImage=docker.build.registry
                     // docker.withRegistry("https://registry.hub.docker.com", "dockerhub")
                     // myapp = docker.build("rrj66520/demo:${env.BUILD_ID}")
+                }
+            }
+        }
+        stage('Nexus Push'){
+            steps{
+                docker.withRegistry("https://registry.hub.docker.com", "dockerhub")
+                    myapp = docker.build("rrj66520/demo:${env.BUILD_ID}")
                 }
             }
         }
