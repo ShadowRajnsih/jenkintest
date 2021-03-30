@@ -1,6 +1,6 @@
 pipeline {
     agent {
-         { label "linux" }
+         dockerfile true
     }
     environment {
         PROJECT_ID = 'master-coder-297316'
