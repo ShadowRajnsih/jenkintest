@@ -12,23 +12,24 @@ pipeline {
                 checkout scm
             }
         }
-        stage("Build image") {
+        stage("Build image and push") {
             steps {
                 script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub')
                     myapp = docker.build("rrj66520/demo:${env.BUILD_ID}")
                 }
             }
         }
-        stage("Push image") {
-            steps {
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-                            myapp.push("latest")
-                            myapp.push("${env.BUILD_ID}")
-                    }
-                }
-            }
-        }        
+        // stage("Push image") {
+        //     steps {
+        //         script {
+        //             docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+        //                     myapp.push("latest")
+        //                     myapp.push("${env.BUILD_ID}")
+        //             }
+        //         }
+        //     }
+        // }        
         stage('Deploy to GKE') {
             steps{
                 sh "sed -i 's/hello:latest/demo:${env.BUILD_ID}/g' deployment.yaml"
