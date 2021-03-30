@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+        docker { label 'linux' }
+    }
     environment {
         PROJECT_ID = 'master-coder-297316'
         CLUSTER_NAME = 'cluster-1'
