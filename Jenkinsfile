@@ -5,6 +5,8 @@ pipeline {
         CLUSTER_NAME = 'cluster-1'
         LOCATION = 'us-central1-a'
         CREDENTIALS_ID = 'master-coder-297316'
+        dockerImage=''
+        registry='rrj66520/jenktry'
     }
     stages {
         stage("Checkout code") {
@@ -15,8 +17,9 @@ pipeline {
         stage("Build image and push") {
             steps {
                 script {
-                    docker.withRegistry("https://registry.hub.docker.com", "dockerhub")
-                    myapp = docker.build("rrj66520/demo:${env.BUILD_ID}")
+                    docker.build.registry
+                    // docker.withRegistry("https://registry.hub.docker.com", "dockerhub")
+                    // myapp = docker.build("rrj66520/demo:${env.BUILD_ID}")
                 }
             }
         }
