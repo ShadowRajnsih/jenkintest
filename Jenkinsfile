@@ -1,7 +1,5 @@
 pipeline {
-    agent {
-         dockerfile true
-    }
+    agent any
     environment {
         PROJECT_ID = 'master-coder-297316'
         CLUSTER_NAME = 'cluster-1'
@@ -9,7 +7,7 @@ pipeline {
         CREDENTIALS_ID = 'master-coder-297316'
         DOCKER_TAG='latest'
         dockerImage=''
-        registry='rrj66520/jenktry'
+        registry='rrj66520/demo'
     }
     stages {
         stage("Checkout code") {
@@ -17,16 +15,23 @@ pipeline {
                 checkout scm
             }
         }
-        stage("Build image and push") {
-            steps {
-                script {
-                    sh "docker build . -t ntrial"
-                    // dockerImage=docker.build.registry
-                    // docker.withRegistry("https://registry.hub.docker.com", "dockerhub")
-                    // myapp = docker.build("rrj66520/demo:${env.BUILD_ID}")
-                }
-            }
+        stage('Building image') {
+      steps{
+        script {
+          dockerImage = docker.build registry + ":$BUILD_NUMBER"
         }
+      }
+    }
+    stage('Deploy Image') {
+      steps{
+        script {
+           docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+                            myapp.push("latest")
+                            myapp.push("${env.BUILD_ID}")
+                    }
+        }
+      }
+    }
         
         // stage("Push image") {
         //     steps {
